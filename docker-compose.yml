@@ -29,7 +29,7 @@ services:
       - GF_SECURITY_ALLOW_EMBEDDING=true
     volumes:
       - ./lgtm-configurations/grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
-      - ./lgtm-configurations/grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      # - ./lgtm-configurations/grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
       - ./lgtm-configurations/grafana/dashboards:/var/lib/grafana/dashboards
       # - ./lgtm-configurations/grafana/grafana.ini:/etc/grafana/grafana.ini
     depends_on:
