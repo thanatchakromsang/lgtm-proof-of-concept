@@ -17,9 +17,9 @@ jobs:
             USER_NAME: ${{secrets.USER_NAME}}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}
-
-          cd lgtm-proof-of-concept
-          git fetch
-          git pull
-          docker-compose up --build -d
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+            cd lgtm-proof-of-concept
+            git fetch
+            git pull
+            docker-compose up --build -d
+            '
