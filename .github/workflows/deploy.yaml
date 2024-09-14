@@ -5,20 +5,21 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  Deploy:
+    name: Deploy on EC2
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: SSH to Instance
-        uses: actions/ssh-keygen@v1
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          name: my-key
-      - name: SSH to Instance
-        uses: actions/setup-ssh@v2
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Run SSH Command
+      - uses: actions/checkout@v2
+      - name: Pull & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: ${{secrets.SSH_HOST}}
+            USER_NAME: ${{secrets.USER_NAME}}
         run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_HOST }} "cd lgtm-proof-of-concept && git fetch && git pull && docker-compose up --build -d"
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}
+
+          cd lgtm-proof-of-concept
+          git fetch
+          git pull
+          docker-compose up --build -d
