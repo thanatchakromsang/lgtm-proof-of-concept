@@ -1,0 +1,24 @@
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: SSH to Instance
+        uses: actions/ssh-keygen@v1
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          name: my-key
+      - name: SSH to Instance
+        uses: actions/setup-ssh@v2
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Run SSH Command
+        run: |
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_HOST }} "cd lgtm-proof-of-concept && git fetch && git pull && docker-compose up --build -d"
