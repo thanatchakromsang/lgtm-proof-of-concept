@@ -15,6 +15,6 @@ COPY --from=build /usr/src/app/package-lock.json /usr/src/app/
 COPY . /usr/src/app
 EXPOSE 8081
 HEALTHCHECK --interval=1m --timeout=5s \
-  CMD curl -f http://localhost/readiness || exit 1
+  CMD curl -f http://localhost/liveness || exit 1
 ENTRYPOINT ["npm"]
 CMD ["start"]
