@@ -14,15 +14,9 @@ const axios = require("axios");
 const otelColProtocal = process.env.OTEL_COL_PROTOCOL || "http";
 const otelColUrl = process.env.OTEL_COL_URL || "otelcol";
 const otelColPort = process.env.OTEL_COL_PORT || 4318;
+const otelHealthCheckPort = process.env.OTEL_HEALTHCHECK_PORT || 13133;
 
 const appPort = process.env.APP_PORT || 8081;
-
-function areConnectionsEstablishedAndMaintained() {
-  return axios
-    .get(`${otelColProtocal}://${otelColUrl}:${otelColPort}`)
-    .then(() => true)
-    .catch(() => false);
-}
 
 app.use(express.static("public"));
 
@@ -31,18 +25,18 @@ app.get("/", function (req, res) {
 });
 
 app.get("/liveness", function (req, res) {
-  console.log("liveness")
+  console.log("liveness");
   res.send("OK");
 });
 
 app.get("/readiness", function (req, res) {
   // Check if connections are established and maintained
-  console.log(areConnectionsEstablishedAndMaintained())
-  if (areConnectionsEstablishedAndMaintained()) {
-    res.sendStatus(200);
-  } else {
-    res.sendStatus(503);
-  }
+  axios
+    .get(
+      `${otelColProtocal}://${otelColUrl}:${otelHealthCheckPort}/healthcheck`,
+    )
+    .then(() => res.sendStatus(200))
+    .catch(() => res.sendStatus(503));
 });
 
 app.get("/randomstr", function (req, res) {

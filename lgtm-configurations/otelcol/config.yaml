@@ -26,6 +26,12 @@ exporters:
 
 extensions:
   health_check:
+    endpoint: "0.0.0.0:13133"
+    path: /healthcheck
+    check_collector_pipeline:
+      enabled: true
+      interval: "5m"
+      exporter_failure_threshold: 5
   pprof:
   zpages:
 

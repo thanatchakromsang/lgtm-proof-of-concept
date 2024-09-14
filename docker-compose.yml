@@ -61,6 +61,7 @@ services:
       - 4317:4317 # otlp grpc
       - 4318:4318 # otlp http
       - 8888:8888 # monitoring
+      - 13133:13133 # healthcheck
     command: --config=/etc/otelcol/config.yaml
     depends_on:
       - loki
@@ -89,5 +90,6 @@ services:
       - OTEL_COL_URL=otelcol
       - OTEL_COL_PORT=4318
       - OTEL_COL_PROTOCOL=http
+      - OTEL_HEALTHCHECK_PORT=13133
     logging:
       driver: json-file
