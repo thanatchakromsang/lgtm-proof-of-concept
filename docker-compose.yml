@@ -82,7 +82,7 @@ services:
       - mimir
       - grafana
     ports:
-      - 8081:8081
+      - 0.0.0.0:8081:8081
     command: ["run", "start-with-tracing"]
     environment:
       - APP_PORT=8081
